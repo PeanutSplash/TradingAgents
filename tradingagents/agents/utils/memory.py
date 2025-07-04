@@ -7,11 +7,14 @@ class FinancialSituationMemory:
     def __init__(self, name, config):
         if config["backend_url"] == "http://localhost:11434/v1":
             self.embedding = "nomic-embed-text"
+            api_key = None  # No API key needed for localhost
         else:
             if config["llm_provider"] == "openai":
                 api_key = os.getenv("OPENAI_API_KEY")
             elif config["llm_provider"] == "google":
                 api_key = os.getenv("GOOGLE_API_KEY")
+            else:
+                raise ValueError(f"Unsupported llm_provider: {config['llm_provider']}")
             self.embedding = config["embedding_model"]
         self.client = OpenAI(base_url=config["backend_url"], api_key=api_key)
         self.chroma_client = chromadb.Client(Settings(allow_reset=True))
