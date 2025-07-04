@@ -272,5 +272,88 @@ def select_llm_provider() -> tuple[str, str]:
     
     display_name, url = choice
     print(f"You selected: {display_name}\tURL: {url}")
-    
+
     return display_name, url
+
+
+def select_embedding_provider() -> tuple[str, str]:
+    """Select the embedding provider using interactive selection."""
+    # Define embedding provider options with their corresponding endpoints
+    EMBEDDING_PROVIDERS = [
+        ("Same as LLM Provider", "same"),
+        ("OpenAI", "https://api.openai.com/v1"),
+        ("Google", "https://generativelanguage.googleapis.com/v1beta/openai/"),
+        ("Ollama (Local)", "http://localhost:11434/v1"),
+    ]
+
+    choice = questionary.select(
+        "Select your Embedding Provider:",
+        choices=[
+            questionary.Choice(display, value=(display, value))
+            for display, value in EMBEDDING_PROVIDERS
+        ],
+        instruction="\n- Use arrow keys to navigate\n- Press Enter to select",
+        style=questionary.Style(
+            [
+                ("selected", "fg:cyan noinherit"),
+                ("highlighted", "fg:cyan noinherit"),
+                ("pointer", "fg:cyan noinherit"),
+            ]
+        ),
+    ).ask()
+
+    if choice is None:
+        console.print("\n[red]No embedding provider selected. Using same as LLM provider...[/red]")
+        return ("Same as LLM Provider", "same")
+
+    display_name, url = choice
+    print(f"You selected: {display_name}\tURL: {url}")
+    return display_name, url
+
+
+def select_embedding_model(provider: str) -> str:
+    """Select embedding model based on provider."""
+    EMBEDDING_MODELS = {
+        "openai": [
+            ("text-embedding-3-small - Cost effective, good performance", "text-embedding-3-small"),
+            ("text-embedding-3-large - Higher quality, more expensive", "text-embedding-3-large"),
+            ("text-embedding-ada-002 - Legacy model", "text-embedding-ada-002"),
+        ],
+        "google": [
+            ("text-embedding-004 - Latest Google embedding model", "text-embedding-004"),
+            ("text-embedding-preview-0409 - Preview model", "text-embedding-preview-0409"),
+        ],
+        "ollama": [
+            ("nomic-embed-text - Local embedding model", "nomic-embed-text"),
+            ("mxbai-embed-large - Large local model", "mxbai-embed-large"),
+        ]
+    }
+
+    if provider.lower() not in EMBEDDING_MODELS:
+        console.print(f"[yellow]Using default embedding model for {provider}[/yellow]")
+        return "default"
+
+    models = EMBEDDING_MODELS[provider.lower()]
+
+    choice = questionary.select(
+        f"Select embedding model for {provider}:",
+        choices=[
+            questionary.Choice(display, value=value)
+            for display, value in models
+        ],
+        instruction="\n- Use arrow keys to navigate\n- Press Enter to select",
+        style=questionary.Style(
+            [
+                ("selected", "fg:green noinherit"),
+                ("highlighted", "fg:green noinherit"),
+                ("pointer", "fg:green noinherit"),
+            ]
+        ),
+    ).ask()
+
+    if choice is None:
+        console.print(f"[yellow]No embedding model selected. Using default for {provider}[/yellow]")
+        return models[0][1]  # Return first model as default
+
+    print(f"You selected: {choice}")
+    return choice

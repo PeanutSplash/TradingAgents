@@ -7,13 +7,16 @@ load_dotenv()
 
 # Create a custom config
 config = DEFAULT_CONFIG.copy()
-config["llm_provider"] = "google"  # Use a different model
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"  # Use a different backend
-config["deep_think_llm"] = "gemini-2.5-pro"  # Use a different model
-config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"  # Use a different model
-config["embedding_model"] = "text-embedding-004"
+config["llm_provider"] = "google"  # Use Google for LLM
+config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"  # Google backend
+config["deep_think_llm"] = "gemini-2.5-pro"  # Use Google model
+config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"  # Use Google model
+# Embedding configuration - can use different provider than LLM
+config["embedding_provider"] = "google"  # Use Google for embeddings
+config["embedding_model"] = "text-embedding-004"  # Google embedding model
+config["embedding_backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"  # Google embedding backend
 config["max_debate_rounds"] = 1  # Increase debate rounds
-config["online_tools"] = True  # Increase debate rounds
+config["online_tools"] = True  # Use online tools
 
 # Initialize with custom config
 ta = TradingAgentsGraph(debug=True, config=config)

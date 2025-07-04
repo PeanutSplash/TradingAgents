@@ -200,7 +200,7 @@ _, decision = ta.propagate("NVDA", "2024-05-10")
 print(decision)
 ```
 
-You can also adjust the default configuration to set your own choice of LLMs, debate rounds, etc.
+You can also adjust the default configuration to set your own choice of LLMs, debate rounds, embedding models, etc.
 
 ```python
 from tradingagents.graph.trading_graph import TradingAgentsGraph
@@ -213,6 +213,11 @@ config["quick_think_llm"] = "gpt-4.1-nano"  # Use a different model
 config["max_debate_rounds"] = 1  # Increase debate rounds
 config["online_tools"] = True # Use online tools or cached data
 
+# Configure embedding models (optional - can use different provider than LLM)
+config["embedding_provider"] = "openai"  # openai, google, ollama
+config["embedding_model"] = "text-embedding-3-large"  # Higher quality embeddings
+config["embedding_backend_url"] = "https://api.openai.com/v1"  # Custom endpoint
+
 # Initialize with custom config
 ta = TradingAgentsGraph(debug=True, config=config)
 
@@ -220,6 +225,39 @@ ta = TradingAgentsGraph(debug=True, config=config)
 _, decision = ta.propagate("NVDA", "2024-05-10")
 print(decision)
 ```
+
+### Embedding Configuration Options
+
+The framework now supports flexible embedding configuration, allowing you to use different providers for LLM and embedding models:
+
+```python
+# Example 1: Use Google for LLM but OpenAI for embeddings
+config = DEFAULT_CONFIG.copy()
+config["llm_provider"] = "google"
+config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+config["deep_think_llm"] = "gemini-2.5-pro"
+config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"
+# Separate embedding configuration
+config["embedding_provider"] = "openai"
+config["embedding_model"] = "text-embedding-3-small"
+config["embedding_backend_url"] = "https://api.openai.com/v1"
+
+# Example 2: Use local Ollama for LLM but cloud for embeddings
+config = DEFAULT_CONFIG.copy()
+config["llm_provider"] = "ollama"
+config["backend_url"] = "http://localhost:11434/v1"
+config["deep_think_llm"] = "llama3.1"
+config["quick_think_llm"] = "llama3.2"
+# Cloud embeddings for better quality
+config["embedding_provider"] = "openai"
+config["embedding_model"] = "text-embedding-3-large"
+config["embedding_backend_url"] = "https://api.openai.com/v1"
+```
+
+**Supported Embedding Providers:**
+- **OpenAI**: `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002`
+- **Google**: `text-embedding-004`, `text-embedding-preview-0409`
+- **Ollama (Local)**: `nomic-embed-text`, `mxbai-embed-large`
 
 > For `online_tools`, we recommend enabling them for experimentation, as they provide access to real-time data. The agents' offline tools rely on cached data from our **Tauric TradingDB**, a curated dataset we use for backtesting. We're currently in the process of refining this dataset, and we plan to release it soon alongside our upcoming projects. Stay tuned!
 

@@ -480,6 +480,23 @@ def get_user_selections():
     selected_shallow_thinker = select_shallow_thinking_agent(selected_llm_provider)
     selected_deep_thinker = select_deep_thinking_agent(selected_llm_provider)
 
+    # Step 7: Embedding configuration
+    console.print(
+        create_question_box(
+            "Step 7: Embedding Configuration", "Configure embedding models for memory and retrieval"
+        )
+    )
+    selected_embedding_provider, embedding_backend_url = select_embedding_provider()
+
+    # Configure embedding model if not using same as LLM
+    if selected_embedding_provider != "Same as LLM Provider":
+        embedding_provider_name = selected_embedding_provider.lower().split()[0]  # Extract provider name
+        selected_embedding_model = select_embedding_model(embedding_provider_name)
+    else:
+        embedding_provider_name = selected_llm_provider.lower()
+        embedding_backend_url = backend_url
+        selected_embedding_model = "default"
+
     return {
         "ticker": selected_ticker,
         "analysis_date": analysis_date,
@@ -489,6 +506,9 @@ def get_user_selections():
         "backend_url": backend_url,
         "shallow_thinker": selected_shallow_thinker,
         "deep_thinker": selected_deep_thinker,
+        "embedding_provider": embedding_provider_name,
+        "embedding_backend_url": embedding_backend_url if embedding_backend_url != "same" else None,
+        "embedding_model": selected_embedding_model,
     }
 
 
@@ -743,6 +763,13 @@ def run_analysis():
     config["deep_think_llm"] = selections["deep_thinker"]
     config["backend_url"] = selections["backend_url"]
     config["llm_provider"] = selections["llm_provider"].lower()
+
+    # Configure embedding settings
+    config["embedding_provider"] = selections["embedding_provider"]
+    if selections["embedding_backend_url"]:
+        config["embedding_backend_url"] = selections["embedding_backend_url"]
+    if selections["embedding_model"] != "default":
+        config["embedding_model"] = selections["embedding_model"]
 
     # Initialize the graph
     graph = TradingAgentsGraph(
