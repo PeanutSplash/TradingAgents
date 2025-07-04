@@ -7,10 +7,10 @@ class FinancialSituationMemory:
     def __init__(self, name, config):
         # Determine embedding provider and backend URL
         embedding_provider = config.get("embedding_provider", config["llm_provider"])
-        embedding_backend_url = config.get("embedding_backend_url") or config["backend_url"]
+        embedding_base_url = config.get("embedding_base_url") or config["base_url"]
 
         # Configure embedding model and API key based on provider
-        if embedding_backend_url == "http://localhost:11434/v1" or embedding_provider == "ollama":
+        if embedding_base_url == "http://localhost:11434/v1" or embedding_provider == "ollama":
             # Local Ollama setup
             self.embedding = "nomic-embed-text"
             api_key = None  # No API key needed for localhost
@@ -25,7 +25,7 @@ class FinancialSituationMemory:
             else:
                 raise ValueError(f"Unsupported embedding_provider: {embedding_provider}")
 
-        self.client = OpenAI(base_url=embedding_backend_url, api_key=api_key)
+        self.client = OpenAI(base_url=embedding_base_url, api_key=api_key)
         self.chroma_client = chromadb.Client(Settings(allow_reset=True))
         self.situation_collection = self.chroma_client.create_collection(name=name)
 

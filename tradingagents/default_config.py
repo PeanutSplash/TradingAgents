@@ -13,10 +13,10 @@ DEFAULT_CONFIG = {
     "deep_think_llm": "o4-mini",
     "quick_think_llm": "gpt-4o-mini",
     "embedding_model": "text-embedding-3-small",
-    "backend_url": "https://api.openai.com/v1",
+    "base_url": "https://api.openai.com/v1",
     # Embedding provider settings (can be different from llm_provider)
     "embedding_provider": "openai",  # openai, google, ollama
-    "embedding_backend_url": None,  # If None, uses backend_url
+    "embedding_base_url": None,  # If None, uses base_url
     # Debate and discussion settings
     "max_debate_rounds": 1,
     "max_risk_discuss_rounds": 1,

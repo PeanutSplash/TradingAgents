@@ -216,7 +216,7 @@ config["online_tools"] = True # Use online tools or cached data
 # Configure embedding models (optional - can use different provider than LLM)
 config["embedding_provider"] = "openai"  # openai, google, ollama
 config["embedding_model"] = "text-embedding-3-large"  # Higher quality embeddings
-config["embedding_backend_url"] = "https://api.openai.com/v1"  # Custom endpoint
+config["embedding_base_url"] = "https://api.openai.com/v1"  # Custom endpoint
 
 # Initialize with custom config
 ta = TradingAgentsGraph(debug=True, config=config)
@@ -234,24 +234,24 @@ The framework now supports flexible embedding configuration, allowing you to use
 # Example 1: Use Google for LLM but OpenAI for embeddings
 config = DEFAULT_CONFIG.copy()
 config["llm_provider"] = "google"
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+config["base_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
 config["deep_think_llm"] = "gemini-2.5-pro"
 config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"
 # Separate embedding configuration
 config["embedding_provider"] = "openai"
 config["embedding_model"] = "text-embedding-3-small"
-config["embedding_backend_url"] = "https://api.openai.com/v1"
+config["embedding_base_url"] = "https://api.openai.com/v1"
 
 # Example 2: Use local Ollama for LLM but cloud for embeddings
 config = DEFAULT_CONFIG.copy()
 config["llm_provider"] = "ollama"
-config["backend_url"] = "http://localhost:11434/v1"
+config["base_url"] = "http://localhost:11434/v1"
 config["deep_think_llm"] = "llama3.1"
 config["quick_think_llm"] = "llama3.2"
 # Cloud embeddings for better quality
 config["embedding_provider"] = "openai"
 config["embedding_model"] = "text-embedding-3-large"
-config["embedding_backend_url"] = "https://api.openai.com/v1"
+config["embedding_base_url"] = "https://api.openai.com/v1"
 ```
 
 **Supported Embedding Providers:**

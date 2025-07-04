@@ -28,7 +28,7 @@ config = {
 ```python
 config = {
     "llm_provider": "openai",                    # openai, google, anthropic, openrouter, ollama
-    "backend_url": "https://api.openai.com/v1", # API endpoint
+    "base_url": "https://api.openai.com/v1", # API endpoint
     "deep_think_llm": "o4-mini",                # Model for complex reasoning
     "quick_think_llm": "gpt-4o-mini",           # Model for quick tasks
 }
@@ -39,7 +39,7 @@ config = {
 config = {
     "embedding_provider": "openai",              # openai, google, ollama
     "embedding_model": "text-embedding-3-small", # Specific embedding model
-    "embedding_backend_url": None,               # Custom endpoint (optional)
+    "embedding_base_url": None,               # Custom endpoint (optional)
 }
 ```
 
@@ -67,7 +67,7 @@ config = DEFAULT_CONFIG.copy()
 ```python
 config = DEFAULT_CONFIG.copy()
 config["llm_provider"] = "google"
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+config["base_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
 config["deep_think_llm"] = "gemini-2.5-pro"
 config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"
 config["embedding_provider"] = "google"
@@ -79,20 +79,20 @@ config["embedding_model"] = "text-embedding-004"
 config = DEFAULT_CONFIG.copy()
 # Use Google for LLM (cost-effective)
 config["llm_provider"] = "google"
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
+config["base_url"] = "https://generativelanguage.googleapis.com/v1beta/openai/"
 config["deep_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"
 config["quick_think_llm"] = "gemini-2.5-flash-lite-preview-06-17"
 # Use OpenAI for embeddings (higher quality)
 config["embedding_provider"] = "openai"
 config["embedding_model"] = "text-embedding-3-large"
-config["embedding_backend_url"] = "https://api.openai.com/v1"
+config["embedding_base_url"] = "https://api.openai.com/v1"
 ```
 
 ### Example 4: Local Development with Ollama
 ```python
 config = DEFAULT_CONFIG.copy()
 config["llm_provider"] = "ollama"
-config["backend_url"] = "http://localhost:11434/v1"
+config["base_url"] = "http://localhost:11434/v1"
 config["deep_think_llm"] = "llama3.1"
 config["quick_think_llm"] = "llama3.2"
 config["embedding_provider"] = "ollama"
@@ -104,13 +104,13 @@ config["embedding_model"] = "nomic-embed-text"
 config = DEFAULT_CONFIG.copy()
 # Local LLM for cost savings
 config["llm_provider"] = "ollama"
-config["backend_url"] = "http://localhost:11434/v1"
+config["base_url"] = "http://localhost:11434/v1"
 config["deep_think_llm"] = "llama3.1"
 config["quick_think_llm"] = "llama3.2"
 # Cloud embeddings for quality
 config["embedding_provider"] = "openai"
 config["embedding_model"] = "text-embedding-3-small"
-config["embedding_backend_url"] = "https://api.openai.com/v1"
+config["embedding_base_url"] = "https://api.openai.com/v1"
 ```
 
 ## 🔑 Environment Variables
